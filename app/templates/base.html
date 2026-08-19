@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>{% block title %}Folio Translator{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/app.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/overrides.css') }}">
+</head>
+<body data-page="{% block page_id %}base{% endblock %}">
+  <div class="grain" aria-hidden="true"></div>
+  <header class="masthead">
+    <a class="brand" href="/" aria-label="Folio Translator 首页">
+      <span class="brand-mark">F</span>
+      <span><strong>Folio</strong><small>译稿工作室</small></span>
+    </a>
+    <nav aria-label="主导航">
+      <a href="/">新建译稿</a>
+      <a href="/memory">译法库</a>
+      <a href="/settings">服务设置</a>
+    </nav>
+    <div class="local-badge"><i></i> LOCAL / 本机</div>
+  </header>
+  <main>{% block content %}{% endblock %}</main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="{{ url_for('static', path='js/app.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

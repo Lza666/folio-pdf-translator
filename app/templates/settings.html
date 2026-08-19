@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}服务设置 · Folio{% endblock %}
+{% block page_id %}settings{% endblock %}
+{% block content %}
+<section class="settings-shell">
+  <header class="section-heading"><p class="eyebrow">SERVICE DESK</p><h1>服务设置</h1><p>地址与模型名保存在 SQLite；密钥进入操作系统密钥环。留空密钥表示保留现有值。</p></header>
+  <form id="provider-form" class="settings-form">
+    <section class="settings-block">
+      <div class="block-number">01</div><div class="block-copy"><h2>翻译模型</h2><p>兼容 OpenAI Chat Completions 的文本模型。</p></div>
+      <div class="block-fields">
+        <label><span>Base URL</span><input id="llm-base-url" value="{{ settings.llm_base_url }}" placeholder="https://provider.example.com"></label>
+        <label><span>模型名称</span><input id="llm-model" value="{{ settings.llm_model }}" placeholder="your-model"></label>
+        <label><span>API Key {% if settings.has_llm_api_key %}<i>已保存</i>{% endif %}</span><input id="llm-api-key" type="password" autocomplete="new-password" placeholder="sk-..."></label>
+        <label><span>附加参数 JSON</span><textarea id="llm-extra-json">{{ settings.llm_extra_json }}</textarea></label>
+        <button type="button" class="ghost-button" data-provider-test="llm">测试模型映射</button>
+      </div>
+    </section>
+    <section class="settings-block">
+      <div class="block-number">02</div><div class="block-copy"><h2>扫描页 OCR</h2><p>Azure Document Intelligence 的 prebuilt-layout 模型。</p></div>
+      <div class="block-fields">
+        <label><span>Azure Endpoint</span><input id="azure-endpoint" value="{{ settings.azure_endpoint }}" placeholder="https://resource.cognitiveservices.azure.com"></label>
+        <label><span>API Version</span><input id="azure-api-version" value="{{ settings.azure_api_version }}"></label>
+        <label><span>API Key {% if settings.has_azure_api_key %}<i>已保存</i>{% endif %}</span><input id="azure-api-key" type="password" autocomplete="new-password"></label>
+        <button type="button" class="ghost-button" data-provider-test="ocr">测试 OCR 连接</button>
+      </div>
+    </section>
+    <div class="settings-submit"><button class="primary-button" type="submit"><span>保存服务设置</span><b>→</b></button><p id="settings-result"></p></div>
+  </form>
+</section>
+{% endblock %}
+

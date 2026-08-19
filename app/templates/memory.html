@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}译法库 · Folio{% endblock %}
+{% block page_id %}memory{% endblock %}
+{% block content %}
+<section class="library-shell">
+  <header class="section-heading"><p class="eyebrow">HOUSE STYLE / SHARED</p><h1>译法库</h1><p>确认后的句段成为翻译记忆；术语作为每次模型翻译的强制约束。</p></header>
+  <div class="library-tabs"><button class="active" data-library-tab="memory">翻译记忆 <b>{{ memories|length }}</b></button><button data-library-tab="terms">术语表 <b>{{ terms|length }}</b></button></div>
+  <section id="memory-library" class="library-panel">
+    <div class="library-actions">
+      <form id="memory-import-form"><label class="ghost-button">导入 CSV / TMX<input type="file" name="file" accept=".csv,.tmx" hidden></label></form>
+      <a class="text-button" href="/api/v1/memory/export?format=csv">导出 CSV</a><a class="text-button" href="/api/v1/memory/export?format=tmx">导出 TMX</a>
+    </div>
+    <div class="ledger">
+      <div class="ledger-head"><span>语言对</span><span>原文</span><span>确认译文</span><span>版本</span></div>
+      {% for row in memories %}<div class="ledger-row"><span>{{ row.source_language }} → {{ row.target_language }}</span><span>{{ row.source_text }}</span><span>{{ row.target_text }}</span><span>v{{ row.version }} <button class="delete-mark" data-delete-memory="{{ row.id }}">×</button></span></div>{% else %}<div class="empty-ledger">还没有确认过的译法。</div>{% endfor %}
+    </div>
+  </section>
+  <section id="terms-library" class="library-panel hidden">
+    <form id="term-form" class="term-form">
+      <select id="term-source-language">{% for code, name in languages.items() %}<option value="{{ code }}">{{ name }}</option>{% endfor %}</select>
+      <span>→</span>
+      <select id="term-target-language">{% for code, name in languages.items() %}<option value="{{ code }}" {% if code == 'zh-Hans' %}selected{% endif %}>{{ name }}</option>{% endfor %}</select>
+      <input id="source-term" placeholder="源术语" required><input id="target-term" placeholder="固定译法" required>
+      <button class="primary-button compact" type="submit"><span>加入术语</span><b>+</b></button>
+    </form>
+    <div class="ledger"><div class="ledger-head"><span>语言对</span><span>源术语</span><span>固定译法</span><span>状态</span></div>
+      {% for row in terms %}<div class="ledger-row"><span>{{ row.source_language }} → {{ row.target_language }}</span><span>{{ row.source_term }}</span><span>{{ row.target_term }}</span><span>{{ '启用' if row.active else '停用' }} <button class="delete-mark" data-delete-term="{{ row.id }}">×</button></span></div>{% else %}<div class="empty-ledger">还没有术语约束。</div>{% endfor %}
+    </div>
+  </section>
+</section>
+{% endblock %}

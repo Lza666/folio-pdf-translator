@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}新建译稿 · Folio{% endblock %}
+{% block page_id %}home{% endblock %}
+{% block content %}
+<section class="hero-shell">
+  <div class="hero-copy reveal">
+    <p class="eyebrow">PDF TRANSLATION & PROOFING</p>
+    <h1>让版面留在原处，<br><em>让语言抵达别处。</em></h1>
+    <p class="lede">上传一份 PDF。Folio 拆解页面结构、逐块翻译，并把每一处不确定留给你确认，而不是藏起来。</p>
+    <dl class="edition-notes">
+      <div><dt>12</dt><dd>种目标语言</dd></div>
+      <div><dt>{{ max_pages }}</dt><dd>页 / 单份上限</dd></div>
+      <div><dt>7d</dt><dd>自动清理</dd></div>
+    </dl>
+  </div>
+  <form id="upload-form" action="/api/v1/jobs" method="post" enctype="multipart/form-data" class="upload-sheet reveal delay-1">
+    <div class="proof-tab">NEW PROOF · 001</div>
+    <label id="drop-zone" class="drop-zone">
+      <input id="pdf-file" type="file" name="file" accept="application/pdf,.pdf" required>
+      <span class="drop-glyph">↥</span>
+      <strong>把 PDF 放到这里</strong>
+      <span id="file-note">或点击选择 · 最大 {{ max_file_mb }}MB / {{ max_pages }} 页</span>
+    </label>
+    <div class="field-grid">
+      <label><span>目标语言</span>
+        <select name="target_language" required>
+          {% for code, name in languages.items() %}<option value="{{ code }}" {% if code == 'zh-Hans' %}selected{% endif %}>{{ name }}</option>{% endfor %}
+        </select>
+      </label>
+      <label><span>PDF 打开密码 <small>可选</small></span><input type="password" name="pdf_password" autocomplete="off" placeholder="不会写入数据库"></label>
+    </div>
+    <fieldset class="output-choice">
+      <legend>输出版本</legend>
+      <label><input type="checkbox" name="output_modes" value="translated" checked><span><b>纯译文校样</b><small>保持原页尺寸与视觉结构</small></span></label>
+      <label><input type="checkbox" name="output_modes" value="bilingual" checked><span><b>左右对照稿</b><small>原页与译页并排展开</small></span></label>
+    </fieldset>
+    <button class="primary-button" type="submit"><span>开始拆解与翻译</span><b>→</b></button>
+    <p class="privacy-note">文件只保存在这台机器上；需要 OCR 或翻译时，相关页面或文本会发送至你配置的服务。</p>
+  </form>
+</section>
+<section class="process-strip">
+  <p>编辑流程</p>
+  <ol><li><b>01</b>页面拆解</li><li><b>02</b>逐块翻译</li><li><b>03</b>人工校样</li><li><b>04</b>双版输出</li></ol>
+</section>
+{% endblock %}
+

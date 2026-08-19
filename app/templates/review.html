@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}校对 {{ job.source_filename }} · Folio{% endblock %}
+{% block page_id %}review{% endblock %}
+{% block content %}
+<div id="review-app" class="review-app" data-job-id="{{ job.id }}" data-token="{{ token }}" data-pages="{{ job.page_count }}">
+  <aside class="page-rail">
+    <div class="rail-heading"><span>页码</span><b id="rail-count">{{ job.page_count }}</b></div>
+    <div id="page-thumbnails" class="thumbnail-list"></div>
+  </aside>
+  <section class="proof-canvas-panel">
+    <header class="proof-toolbar">
+      <div><p class="eyebrow">PROOF DESK / {{ target_name }}</p><h1>{{ job.source_filename }}</h1></div>
+      <div class="view-switch"><button class="active" data-view="source">原页定位</button><button data-view="issues">只看问题</button></div>
+    </header>
+    <div class="canvas-stage">
+      <div id="page-canvas" class="page-canvas">
+        <img id="page-image" alt="PDF 页面预览">
+        <div id="segment-layer" class="segment-layer"></div>
+      </div>
+    </div>
+    <footer class="canvas-footer"><button id="prev-page" class="text-button">← 上一页</button><span>第 <b id="current-review-page">1</b> / {{ job.page_count }} 页</span><button id="next-page" class="text-button">下一页 →</button></footer>
+  </section>
+  <aside class="editor-panel">
+    <header><p class="eyebrow">SEGMENT EDITOR</p><h2>逐块校样</h2></header>
+    <div id="empty-editor" class="empty-editor"><span>✣</span><p>点击页面上的文本框<br>开始核对译文</p></div>
+    <form id="segment-editor" class="segment-editor hidden">
+      <input id="segment-id" type="hidden">
+      <div class="segment-meta"><span id="segment-language">—</span><span id="segment-confidence">—</span></div>
+      <label><span>原文</span><textarea id="source-text" readonly></textarea></label>
+      <label><span>译文</span><textarea id="target-text" required></textarea></label>
+      <div id="segment-issues" class="issue-chips"></div>
+      <div id="memory-suggestions" class="memory-suggestions"></div>
+      <label class="check-line"><input id="remember-translation" type="checkbox"><span>确认后写入共享译法库</span></label>
+      <button class="primary-button compact" type="submit"><span>保存并确认</span><b>✓</b></button>
+    </form>
+    <section class="issue-drawer"><header><h3>问题队列</h3><b id="review-issue-count">0</b></header><div id="issue-list"></div></section>
+    <section class="export-drawer">
+      <h3>输出校样</h3>
+      <div class="export-grid">
+        <button data-render="translated" data-final="false">纯译文<br><small>草稿</small></button>
+        <button data-render="bilingual" data-final="false">左右对照<br><small>草稿</small></button>
+        <button data-render="translated" data-final="true">纯译文<br><small>终稿</small></button>
+        <button data-render="bilingual" data-final="true">左右对照<br><small>终稿</small></button>
+      </div>
+      <div id="artifact-list" class="artifact-list"></div>
+    </section>
+  </aside>
+</div>
+{% endblock %}
+
